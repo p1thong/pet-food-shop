@@ -2,10 +2,6 @@
 
 ASP.NET Core Web API cho hệ thống quản lý cửa hàng thức ăn cho thú cưng.
 
-## 🎯 Tổng quan
-
-PetFoodShop là một RESTful API được xây dựng bằng **.NET 8.0** và **PostgreSQL**, tuân theo kiến trúc **Clean Architecture** với pattern **Repository-Service**.
-
 ## 🏗️ Kiến trúc
 
 ```
@@ -142,84 +138,4 @@ dotnet run --project PetFoodShop.Api
 dotnet watch run --project PetFoodShop.Api
 ```
 
-API sẽ chạy tại: `https://localhost:5001` hoặc `http://localhost:5000`
 
-### Swagger UI
-Truy cập Swagger documentation tại: `https://localhost:5001/swagger`
-
-## 🔑 Tính năng chính
-
-### ✅ Đã hoàn thiện
-1. **Quản lý sản phẩm**
-   - CRUD operations
-   - Soft delete
-   - Filter theo category
-   - Quản lý tồn kho
-
-2. **Quản lý người dùng**
-   - Đăng ký/đăng nhập
-   - Password hashing với BCrypt
-   - Role-based (customer/admin)
-   - Soft delete
-
-3. **Giỏ hàng**
-   - Thêm/xóa/cập nhật items
-   - Tính tổng giá trị
-   - Price snapshot
-
-4. **Đơn hàng**
-   - Tạo đơn từ giỏ hàng
-   - Tracking trạng thái
-   - Tự động trừ tồn kho
-   - Order history
-
-5. **Thanh toán**
-   - Multiple payment methods
-   - Transaction tracking
-   - Payment status
-
-6. **Cửa hàng**
-   - Store locations với GPS
-   - Tìm kiếm cửa hàng gần (Haversine formula)
-
-## 🔐 Security
-
-- ✅ Password hashing với BCrypt
-- ✅ Connection string trong appsettings
-- ⚠️ Cần bổ sung: JWT Authentication, Authorization policies
-
-## 📝 Development Notes
-
-### Design Patterns
-- **Repository Pattern** - Tách biệt data access
-- **Generic Repository** - Tái sử dụng code
-- **Service Layer** - Business logic
-- **DTO Pattern** - Data transfer
-
-### Code Quality
-- ✅ Không có compilation errors
-- ✅ Không có duplicate code
-- ✅ Clean Architecture
-- ✅ SOLID principles
-- ✅ Async/await pattern
-
-## 🚧 Cải tiến tiếp theo
-
-- [ ] Implement JWT Authentication
-- [ ] Add Authorization policies
-- [ ] Unit tests
-- [ ] Integration tests
-- [ ] API rate limiting
-- [ ] Logging (Serilog)
-- [ ] Caching (Redis)
-- [ ] API versioning
-- [ ] Health checks
-- [ ] Docker support
-
-## 📄 License
-
-This project is for educational purposes.
-
----
-
-**Developed with ❤️ using .NET 8.0 & PostgreSQL**

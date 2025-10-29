@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetFoodShop.Api.Models;
 
@@ -22,4 +23,7 @@ public partial class Payment
     public DateTime? Createdat { get; set; }
 
     public virtual Order? Order { get; set; }
+    
+    [Column("paymentlink")] 
+    public string? Paymentlink { get; set; }
 }

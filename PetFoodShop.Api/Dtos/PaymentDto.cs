@@ -10,6 +10,7 @@ public class PaymentDto
     public string? Transactionid { get; set; }
     public DateTime? Paidat { get; set; }
     public DateTime? Createdat { get; set; }
+    public string? PaymentLink { get; set; }
 }
 
 public class CreatePaymentDto

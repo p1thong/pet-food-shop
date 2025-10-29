@@ -1,17 +1,31 @@
+using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Options;
+using PayOS;
 using PetFoodShop.Api.Dtos;
 using PetFoodShop.Api.Models;
 using PetFoodShop.Api.Repositories.Interfaces;
 using PetFoodShop.Api.Services.Interfaces;
+using PayOS.Models;
+using PayOS.Models.V2.PaymentRequests;
+using PayOSOptions = PetFoodShop.Api.Dtos.PayOSOptions;
 
 namespace PetFoodShop.Api.Services.Implements;
 
 public class PaymentService : IPaymentService
 {
     private readonly IPaymentRepository _paymentRepository;
+    private readonly PayOSClient _payos; // v2 client
+    private readonly PayOSOptions _opt;
 
-    public PaymentService(IPaymentRepository paymentRepository)
+    public PaymentService(
+        IPaymentRepository paymentRepository,
+        PayOSClient payos,
+        IOptions<PayOSOptions> opt)
     {
         _paymentRepository = paymentRepository;
+        _payos = payos;
+        _opt = opt.Value;
     }
 
     public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync()
@@ -40,17 +54,49 @@ public class PaymentService : IPaymentService
 
     public async Task<PaymentDto> CreatePaymentAsync(CreatePaymentDto createDto)
     {
+        using var http = new HttpClient();
+        http.BaseAddress = new Uri("https://api-merchant.payos.vn");
+
+        var json = PayOSHelper.BuildSignedPaymentRequestBody(
+            amount: 100000,
+            cancelUrl: "https://localhost:3002/pay/cancel",
+            description: "Order #1234",
+            returnUrl: "https://localhost:3002/pay/return",
+            checksumKey: "5032d559962762d03cad25dcbdcd4f536c040dd3d6ae4dceedb6ea6e9fdb0cac"
+        );
+
+        var req = new HttpRequestMessage(HttpMethod.Post, "/v2/payment-requests")
+        {
+            Content = new StringContent(json, Encoding.UTF8, "application/json")
+        };
+
+// Add headers
+        req.Headers.Add("x-client-id", "504291a5-3666-4475-8e83-69483fb1858e");
+        req.Headers.Add("x-api-key", "281d483e-823a-4c19-8eb6-4a242486850c");
+
+        var resp = await http.SendAsync(req);
+        string respBody = await resp.Content.ReadAsStringAsync();
+        
+        using var doc = JsonDocument.Parse(respBody);
+        string checkoutUrl = doc.RootElement
+            .GetProperty("data")
+            .GetProperty("checkoutUrl")
+            .GetString();
+        // 4️⃣ Save the payment record (after getting checkout URL)
         var payment = new Payment
         {
-            Orderid = createDto.Orderid,
-            Method = createDto.Method,
-            Amount = createDto.Amount,
-            Status = "pending",
-            Transactionid = createDto.Transactionid,
-            Createdat = DateTime.Now
+            Orderid       = createDto.Orderid,
+            Method        = createDto.Method,
+            Amount        = createDto.Amount,
+            Status        = "pending",
+            Transactionid = createDto.Transactionid, // store PayOS payment link id
+            Paymentlink   = checkoutUrl,   // assign checkout URL here
+            Createdat     = DateTime.Now
         };
 
         var createdPayment = await _paymentRepository.AddAsync(payment);
+
+        // 5️⃣ Return DTO to client
         return MapToDto(createdPayment);
     }
 
@@ -88,7 +134,7 @@ public class PaymentService : IPaymentService
             Transactionid = payment.Transactionid,
             Paidat = payment.Paidat,
             Createdat = payment.Createdat,
+            PaymentLink = payment.Paymentlink
         };
     }
 }
-

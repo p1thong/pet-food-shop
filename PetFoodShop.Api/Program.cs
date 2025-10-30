@@ -1,3 +1,5 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -5,12 +7,18 @@ using PayOS;
 using PetFoodShop.Api.Data;
 using PetFoodShop.Api.Repositories.Implements;
 using PetFoodShop.Api.Repositories.Interfaces;
+using PetFoodShop.Api.Services;
 using PetFoodShop.Api.Services.Implements;
 using PetFoodShop.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var firebasePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "fcmadmin.json";
 
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile(firebasePath)
+});
 
 // Add services
 builder.Services.AddControllers();
@@ -61,6 +69,9 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IStoreLocationService, StoreLocationService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+// Other
+builder.Services.AddSingleton<FCMService>();
 
 var app = builder.Build();
 

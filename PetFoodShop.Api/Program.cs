@@ -13,12 +13,12 @@ using PetFoodShop.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var firebase = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "";
+//var firebase = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "";
 
-FirebaseApp.Create(new AppOptions()
-{
-    Credential = GoogleCredential.FromFile(firebase)
-});
+//FirebaseApp.Create(new AppOptions()
+//{
+//    Credential = GoogleCredential.FromFile(firebase)
+//});
 
 // Add services
 builder.Services.AddControllers();

@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PayOS;
 using PetFoodShop.Api.Data;
-using PetFoodShop.Api.Repositories.Interfaces;
 using PetFoodShop.Api.Repositories.Implements;
-using PetFoodShop.Api.Services.Interfaces;
+using PetFoodShop.Api.Repositories.Interfaces;
 using PetFoodShop.Api.Services.Implements;
+using PetFoodShop.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +64,10 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 var app = builder.Build();
 
-
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 // Middleware
 app.UseSwagger();

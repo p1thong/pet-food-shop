@@ -68,6 +68,6 @@ jobs:
 
             docker build --no-cache -t petshop-api -f PetFoodShop.Api/Dockerfile .
 
-            docker run -d --name petshop-api -p 8080:8080 --env-file PetFoodShop.Api/.env -e GOOGLE_APPLICATION_CREDENTIALS=/root/fcm/fcmadmin.json -v /root/fcm/fcmadmin.json:/app/config/fcmadmin.json:ro petshop-api
+            docker run -d --name petshop-api -p 8080:8080 --env-file PetFoodShop.Api/.env -e GOOGLE_APPLICATION_CREDENTIALS=/app/config/fcmadmin.json -v /root/fcm/fcmadmin.json:/app/config/fcmadmin.json:ro petshop-api
 
             # docker compose up -d --build --force-recreate petshop-api

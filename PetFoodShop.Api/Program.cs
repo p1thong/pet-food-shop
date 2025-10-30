@@ -60,6 +60,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IStoreLocationRepository, StoreLocationRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<FcmRepository>();
 
 // Register Services
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -69,6 +70,8 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IStoreLocationService, StoreLocationService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IFcmTokenService, FcmTokenService>();
 
 // Other
 builder.Services.AddSingleton<FCMService>();

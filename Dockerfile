@@ -6,10 +6,10 @@ WORKDIR /src
 COPY . .
 
 #Restore
-RUN dotnet restore "PetFoodShop.Api/PetFoodShop.Api.csproj"
+RUN dotnet restore "PetFoodShop.Api.csproj"
 
 #Build 
-RUN dotnet publish "PetFoodShop.Api/PetFoodShop.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "PetFoodShop.Api.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app

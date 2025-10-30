@@ -26,8 +26,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            sudo mkdir -p /opt/petshop-main
-            sudo rm -rf /opt/petshop-main/*
+            mkdir -p /opt/petshop-main
+            rm -rf /opt/petshop-main/*
             echo "Cleaned old source code on VPS."
 
       # 3. Copy source code to VPS
@@ -50,7 +50,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             ENV_DIR="/opt/petshop-main"
-            sudo sh -c 'echo "${{ secrets.ENV }}" > /opt/petshop-main/PetFoodShop.Api/.env'
+            echo "${{ secrets.ENV }}" > "$ENV_DIR/PetFoodShop.Api/.env"
             echo "Wrote .env files on VPS."
 
       # 5. Deploy container on VPS
@@ -63,11 +63,11 @@ jobs:
           script: |
             cd /opt/petshop-main
 
-            sudo docker stop petshop-api || true
-            sudo docker rm petshop-api || true
+            docker stop petshop-api || true
+            docker rm petshop-api || true
 
-            sudo docker build --no-cache -t petshop-api -f PetFoodShop.Api/Dockerfile .
+            docker build --no-cache -t petshop-api -f PetFoodShop.Api/Dockerfile .
 
-            sudo docker run -d --name petshop-api -p 8080:8080 --env-file PetFoodShop.Api/.env petshop-api
+            docker run -d --name petshop-api -p 8080:8080 --env-file PetFoodShop.Api/.env petshop-api
 
             # docker compose up -d --build --force-recreate petshop-api

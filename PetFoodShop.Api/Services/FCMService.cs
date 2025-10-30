@@ -11,14 +11,14 @@ namespace PetFoodShop.Api.Services
         public FCMService(ILogger<FCMService> logger)
         {
             _logger = logger;
-            //if (FirebaseApp.DefaultInstance == null)
-            //{
-            //    var firebase = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "";
-            //    FirebaseApp.Create(new AppOptions()
-            //    {
-            //        Credential = GoogleCredential.FromFile(firebase)
-            //    });
-            //}
+            if (FirebaseApp.DefaultInstance == null)
+            {
+                var firebase = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "";
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile(firebase)
+                });
+            }
         }
 
         public async Task<string> SendToDeviceAsync(

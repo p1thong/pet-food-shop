@@ -18,6 +18,15 @@ namespace PetFoodShop.Api.Services.Implements
         {
             try
             {
+                var existToken = await _fcmTokenRepository.GetByUserIdAsync(userId);
+                if (existToken != null)
+                {
+                    existToken.Token = token;
+                    existToken.Createdat = DateTime.Now;
+                    await _fcmTokenRepository.UpdateAsync(existToken);
+                    return;
+                }
+
                 var fcmToken = new Fcmtoken
                 {
                     Userid = userId,

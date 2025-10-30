@@ -13,10 +13,9 @@ namespace PetFoodShop.Api.Services
             _logger = logger;
             if (FirebaseApp.DefaultInstance == null)
             {
-                var firebasePath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "fcmadmin.json";
                 FirebaseApp.Create(new AppOptions()
                 {
-                    Credential = GoogleCredential.FromFile(firebasePath)
+                    Credential = GoogleCredential.FromFile("fcmadmin.json")
                 });
             }
         }

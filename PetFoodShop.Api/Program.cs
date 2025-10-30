@@ -13,7 +13,7 @@ using PetFoodShop.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var firebase = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "fcmadmin.json";
+var firebase = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "";
 
 FirebaseApp.Create(new AppOptions()
 {

@@ -58,7 +58,7 @@ public class PaymentService : IPaymentService
         http.BaseAddress = new Uri("https://api-merchant.payos.vn");
 
         var json = PayOSHelper.BuildSignedPaymentRequestBody(
-            amount: 100000,
+            amount: createDto.Amount,
             cancelUrl: "https://localhost:3002/pay/cancel",
             description: "Order #1234",
             returnUrl: "https://localhost:3002/pay/return",

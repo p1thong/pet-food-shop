@@ -1,15 +1,24 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PayOS;
 using PetFoodShop.Api.Data;
-using PetFoodShop.Api.Repositories.Interfaces;
 using PetFoodShop.Api.Repositories.Implements;
-using PetFoodShop.Api.Services.Interfaces;
+using PetFoodShop.Api.Repositories.Interfaces;
+using PetFoodShop.Api.Services;
 using PetFoodShop.Api.Services.Implements;
+using PetFoodShop.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var firebase = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS") ?? "";
 
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile(firebase)
+});
 
 // Add services
 builder.Services.AddControllers();
@@ -51,6 +60,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IStoreLocationRepository, StoreLocationRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<FcmRepository>();
 
 // Register Services
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -60,17 +70,19 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IStoreLocationService, StoreLocationService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IFcmTokenService, FcmTokenService>();
+
+// Other
+builder.Services.AddSingleton<FCMService>();
 
 var app = builder.Build();
 
-
+app.UseForwardedHeaders();
 
 // Middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

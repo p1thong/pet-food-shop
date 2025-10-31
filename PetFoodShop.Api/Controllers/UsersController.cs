@@ -9,10 +9,12 @@ namespace PetFoodShop.Api.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly INotificationService _notificationService;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService, INotificationService notificationService)
     {
         _userService = userService;
+        _notificationService = notificationService;
     }
 
     [HttpGet]

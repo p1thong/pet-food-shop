@@ -119,5 +119,10 @@ public class UserService : IUserService
             Updatedat = user.Updatedat
         };
     }
+
+    public async Task<User?> GetUserByIdEntityAsync(int id)
+    {
+        return await _userRepository.GetByIdAsync(id);
+    }
 }
 

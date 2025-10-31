@@ -59,6 +59,7 @@ public class PaymentService : IPaymentService
 
         // Use deep links for mobile app
         var json = PayOSHelper.BuildSignedPaymentRequestBody(
+            orderId: createDto.Orderid,
             amount: createDto.Amount,
             cancelUrl: "petshop://payment/cancel",  // Deep link for cancel
             description: $"Order #{createDto.Orderid}",

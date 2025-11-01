@@ -17,7 +17,7 @@ public class CreatePaymentDto
 {
     public int Orderid { get; set; }
     public string Method { get; set; } = null!;
-    public decimal Amount { get; set; }
+    public int Amount { get; set; }
     public string? Transactionid { get; set; }
 }
 

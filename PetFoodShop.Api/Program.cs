@@ -72,6 +72,8 @@ builder.Services.AddScoped<IStoreLocationService, StoreLocationService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IFcmTokenService, FcmTokenService>();
+builder.Services.AddScoped<FcmRepository>();
+
 
 // Other
 builder.Services.AddSingleton<FCMService>();

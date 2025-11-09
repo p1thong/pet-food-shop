@@ -61,5 +61,19 @@ namespace PetFoodShop.Api.Services.Implements
                 throw;
             }
         }
+
+        public Task<Fcmtoken> GetTokenByUserIdAsync(int userId)
+        {
+            try
+            {
+                var token = _fcmTokenRepository.GetByUserIdAsync(userId);
+                return token;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
     }
 }

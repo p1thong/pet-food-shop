@@ -87,6 +87,21 @@ namespace PetFoodShop.Api.Controllers
 
             await _messageService.SaveNewMessage(message);
 
+            var userToken = await _fcmTokenService.GetTokenByUserIdAsync(request.ReceiverId);
+
+            // Send notification to receiver
+            await _fcmService.SendToDeviceAsync(
+                token: userToken.Token,
+                title: "Thanh toán đơn hàng thành công",
+                body: request.Message,
+                type: "system",
+                data: new Dictionary<string, string>
+                {
+                    { "conversationId", message.Conversationid.ToString() },
+                    { "senderId", request.SenderId.ToString() }
+                }
+            );
+
             return Ok(new
             {
                 success = true,

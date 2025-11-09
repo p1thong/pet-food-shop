@@ -77,7 +77,6 @@ namespace PetFoodShop.Api.Controllers
 
             var message = new Message
             {
-                Conversationid = request.ConversationId,
                 Orderid = request.OrderId,
                 Senderid = request.SenderId,
                 Receiverid = request.ReceiverId,

@@ -37,9 +37,10 @@ namespace PetFoodShop.Api.Controllers
         [HttpPost("send-all")]
         public async Task<IActionResult> SendNotificationToAllUser([FromBody] NotificationRequest request)
         {
-            var result = await _fcmService.SendToDeviceAsync();
+            //var result = await _fcmService.SendToDeviceAsync();
 
-            return Ok(new { messageId = result });
+            //return Ok(new { messageId = result });
+            return Ok();
         }
 
         [HttpPost("update-fcm")]

@@ -6,9 +6,9 @@ namespace PetFoodShop.Api.Services.Implements
     public class NotificationService : INotificationService
     {
         private readonly FCMService _fcmService;
-        private readonly FcmTokenService _fcmTokenService;
+        private readonly IFcmTokenService _fcmTokenService;
 
-        public NotificationService(FCMService fcmService, FcmTokenService fcmTokenService)
+        public NotificationService(FCMService fcmService, IFcmTokenService fcmTokenService)
         {
             _fcmService = fcmService;
             _fcmTokenService = fcmTokenService;

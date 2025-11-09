@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PetFoodShop.Api.Dtos;
+using PetFoodShop.Api.Models;
 using PetFoodShop.Api.Services;
 using PetFoodShop.Api.Services.Interfaces;
 
@@ -12,12 +15,14 @@ namespace PetFoodShop.Api.Controllers
         private readonly FCMService _fcmService;
         private readonly IUserService _userService;
         private readonly IFcmTokenService _fcmTokenService;
+        private readonly IMessageService _messageService;
 
-        public NotificationController(FCMService fcmService, IUserService userService, IFcmTokenService fcmTokenService)
+        public NotificationController(FCMService fcmService, IUserService userService, IFcmTokenService fcmTokenService, IMessageService messageService)
         {
             _fcmService = fcmService;
             _userService = userService;
             _fcmTokenService = fcmTokenService;
+            _messageService = messageService;
         }
 
         [HttpPost("send")]
@@ -62,6 +67,32 @@ namespace PetFoodShop.Api.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateMessage([FromBody] MessageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var message = new Message
+            {
+                Conversationid = request.ConversationId,
+                Orderid = request.OrderId,
+                Senderid = request.SenderId,
+                Receiverid = request.ReceiverId,
+                Message1 = request.Message,
+                Createdat = DateTime.UtcNow,
+                Isread = false
+            };
+
+            await _messageService.SaveNewMessage(message);
+
+            return Ok(new
+            {
+                success = true,
+                data = message
+            });
         }
     }
 

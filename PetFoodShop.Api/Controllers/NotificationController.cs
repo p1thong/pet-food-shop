@@ -34,15 +34,33 @@ namespace PetFoodShop.Api.Controllers
             return Ok(new { messageId = result });
         }
 
+        [HttpPost("send-all")]
+        public async Task<IActionResult> SendNotificationToAllUser([FromBody] NotificationRequest request)
+        {
+            var result = await _fcmService.SendToDeviceAsync();
+
+            return Ok(new { messageId = result });
+        }
+
         [HttpPost("update-fcm")]
         public async Task<IActionResult> UpdateFcmToken([FromBody] FcmTokenRequest req)
         {
-            var user = await _userService.GetUserByIdEntityAsync(req.UserId);
-            if (user == null) return NotFound();
+            try
+            {
+                var user = await _userService.GetUserByIdEntityAsync(req.UserId);
+                if (user == null) return NotFound();
 
-            await _fcmTokenService.AddFcmTokenAsync(req.UserId, req.Token);
+                await _fcmTokenService.AddFcmTokenAsync(req.UserId, req.Token);
 
-            return Ok(new { Message = "FCM token updated" });
+                // Subscribe to topic based on user role
+                await _fcmService.SubscribeToTopicAsync(req.Token, "allUsers");
+
+                return Ok(new { Message = "FCM token updated" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 

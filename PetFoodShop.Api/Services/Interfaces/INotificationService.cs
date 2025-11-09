@@ -3,5 +3,6 @@
     public interface INotificationService
     {
         Task SendWelcomeNotificationAsync(string fcmToken, string userName);
+        Task SendAllUserAsync();
     }
 }

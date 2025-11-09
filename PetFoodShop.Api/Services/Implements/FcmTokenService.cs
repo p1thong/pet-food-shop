@@ -42,5 +42,24 @@ namespace PetFoodShop.Api.Services.Implements
                 throw;
             }
         }
+
+        public async Task<List<string>> GetAllTokensAsync()
+        {
+            try
+            {
+                var fcmTokens = await _fcmTokenRepository.GetAllAsync();
+                var tokens = fcmTokens
+                    .Select(t => t.Token)
+                    .Where(t => !string.IsNullOrEmpty(t))
+                    .Distinct()
+                    .ToList();
+
+                return tokens;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

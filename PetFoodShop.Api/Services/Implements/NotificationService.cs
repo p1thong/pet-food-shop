@@ -6,10 +6,34 @@ namespace PetFoodShop.Api.Services.Implements
     public class NotificationService : INotificationService
     {
         private readonly FCMService _fcmService;
+        private readonly FcmTokenService _fcmTokenService;
 
-        public NotificationService(FCMService fcmService)
+        public NotificationService(FCMService fcmService, FcmTokenService fcmTokenService)
         {
             _fcmService = fcmService;
+            _fcmTokenService = fcmTokenService;
+        }
+
+        public async Task SendAllUserAsync()
+        {
+            try
+            {
+                var message = new Message
+                {
+                    Topic = "allUsers",
+                    Notification = new Notification
+                    {
+                        Title = "Thông báo từ PetShop",
+                        Body = "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!"
+                    },
+                };
+
+                var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task SendWelcomeNotificationAsync(string fcmToken, string userName)

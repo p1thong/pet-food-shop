@@ -3,5 +3,6 @@
     public interface IFcmTokenService
     {
         public Task AddFcmTokenAsync(int userId, string token);
+        public Task<List<string>> GetAllTokensAsync();
     }
 }

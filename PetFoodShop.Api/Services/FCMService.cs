@@ -21,6 +21,15 @@ namespace PetFoodShop.Api.Services
             }
         }
 
+        public async Task SubscribeToTopicAsync(string token, string topic)
+        {
+            var response = await FirebaseMessaging.DefaultInstance.SubscribeToTopicAsync(
+                new List<string> { token },
+                topic
+            );
+            _logger.LogInformation("Subscribed to topic {Topic}: {Response}", topic, response);
+        }
+
         public async Task<string> SendToDeviceAsync(
             string token,
             string title,

@@ -57,11 +57,13 @@ public class PaymentService : IPaymentService
         using var http = new HttpClient();
         http.BaseAddress = new Uri("https://api-merchant.payos.vn");
 
+        // Use deep links for mobile app
         var json = PayOSHelper.BuildSignedPaymentRequestBody(
-            amount: 100000,
-            cancelUrl: "https://localhost:3002/pay/cancel",
-            description: "Order #1234",
-            returnUrl: "https://localhost:3002/pay/return",
+            orderId: createDto.Orderid,
+            amount: createDto.Amount,
+            cancelUrl: "petshop://payment/cancel",  // Deep link for cancel
+            description: $"Order #{createDto.Orderid}",
+            returnUrl: "petshop://payment/success", // Deep link for success
             checksumKey: "5032d559962762d03cad25dcbdcd4f536c040dd3d6ae4dceedb6ea6e9fdb0cac"
         );
 
@@ -70,7 +72,7 @@ public class PaymentService : IPaymentService
             Content = new StringContent(json, Encoding.UTF8, "application/json")
         };
 
-// Add headers
+        // Add headers
         req.Headers.Add("x-client-id", "504291a5-3666-4475-8e83-69483fb1858e");
         req.Headers.Add("x-api-key", "281d483e-823a-4c19-8eb6-4a242486850c");
 
@@ -82,7 +84,8 @@ public class PaymentService : IPaymentService
             .GetProperty("data")
             .GetProperty("checkoutUrl")
             .GetString();
-        // 4️⃣ Save the payment record (after getting checkout URL)
+
+        // Save the payment record (after getting checkout URL)
         var payment = new Payment
         {
             Orderid       = createDto.Orderid,
@@ -96,7 +99,7 @@ public class PaymentService : IPaymentService
 
         var createdPayment = await _paymentRepository.AddAsync(payment);
 
-        // 5️⃣ Return DTO to client
+        // Return DTO to client
         return MapToDto(createdPayment);
     }
 

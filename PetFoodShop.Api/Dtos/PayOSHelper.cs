@@ -13,6 +13,7 @@ public static class PayOSHelper
     /// (replicates the Postman pre-request script you shared).
     /// </summary>
     public static string BuildSignedPaymentRequestBody(
+        int orderId,
         int amount,
         string cancelUrl,
         string description,
@@ -20,7 +21,7 @@ public static class PayOSHelper
         string checksumKey)
     {
         // 1️⃣ Generate unique orderCode and expiration timestamp
-        long orderCode = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        long orderCode = orderId;
         long expiredAt = DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds(); // +1 hour
 
         // 2️⃣ Build the string for signature

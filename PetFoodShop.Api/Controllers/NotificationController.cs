@@ -81,7 +81,7 @@ namespace PetFoodShop.Api.Controllers
                 Senderid = request.SenderId,
                 Receiverid = request.ReceiverId,
                 Message1 = request.Message,
-                Createdat = DateTime.UtcNow,
+                Createdat = DateTime.Now,
                 Isread = false
             };
 
